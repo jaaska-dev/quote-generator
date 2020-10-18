@@ -4,9 +4,25 @@ const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loaderComponent = document.getElementById("loader");
+
+
+//Show loading
+const loading = () => {
+  loaderComponent.hidden = false;
+  quoteContainer.hidden = true;
+}
+
+const loaded = () => {
+  if(!loaderComponent.hidden) {
+    quoteContainer.hidden = false;
+    loaderComponent.hidden = true;
+  }
+}
 
 // Getting a quote from forismatic.com's API with fetch through a proxy API to avoid the CORS policy
 const getQuote = async () => {
+  loading();
   const proxyUrl = "https://cors-anywhere.herokuapp.com/";
   const apiUrl =
     "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
@@ -19,6 +35,8 @@ const getQuote = async () => {
       authorText.innerText = "Loading...";
     } else {
       authorText.innerText = data.quoteAuthor;
+      //Stop the loader and show the quote
+      loaded();
     }
     //Reducing font size for long quotes
     if(data.quoteText.length > 50) {
@@ -45,4 +63,4 @@ const tweetHandler = () => {
 twitterBtn.addEventListener('click', tweetHandler);
 newQuoteBtn.addEventListener('click', getQuote);
 //On Loading
-getQuote();
+ getQuote();
