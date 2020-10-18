@@ -7,13 +7,14 @@ const newQuoteBtn = document.getElementById("new-quote");
 const loaderComponent = document.getElementById("loader");
 
 
-//Show loading
-const loading = () => {
+
+const showLoadingSpinner = () => {
   loaderComponent.hidden = false;
   quoteContainer.hidden = true;
 }
 
-const loaded = () => {
+
+const hideLoadingSpinner = () => {
   if(!loaderComponent.hidden) {
     quoteContainer.hidden = false;
     loaderComponent.hidden = true;
@@ -22,7 +23,7 @@ const loaded = () => {
 
 // Getting a quote from forismatic.com's API with fetch through a proxy API to avoid the CORS policy
 const getQuote = async () => {
-  loading();
+  showLoadingSpinner();
   const proxyUrl = "https://cors-anywhere.herokuapp.com/";
   const apiUrl =
     "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
@@ -36,7 +37,7 @@ const getQuote = async () => {
     } else {
       authorText.innerText = data.quoteAuthor;
       //Stop the loader and show the quote
-      loaded();
+      hideLoadingSpinner();
     }
     //Reducing font size for long quotes
     if(data.quoteText.length > 50) {
